@@ -75,13 +75,13 @@ userRouter.post("/signin" , async(req , res) => {
 
 userRouter.get("/" , authmiddleware, async(req , res) => {
     //@ts-ignore
-    const id = req.id;
+    const id = req.id; // Get the user ID from the request object, which is set by the authmiddleware
     const user = await prismaClient.user.findFirst({
         where: {
             id: id
         },
         select:{
-            name: true,
+            name : true,
             email: true
         }
     });
