@@ -8,6 +8,8 @@ app.post("/hooks/catch/:userId/:zapId" , async(req , res) => {
     const userId = req.params["userId"]; // User ID is not used in this example, but could be used for authorization or logging
     const zapId = req.params["zapId"]; // This is the ID of the Zap that the webhook is associated with
     const body = req.body;
+    // We want when the user will hit the hooks endpoint, then the entry must be stored in the DB as well as in a queue 
+    // But here we use a Transactional Outbox pattern. 
     await client.$transaction(async tx => {
         const run = await tx.zapRun.create({
             data:{
