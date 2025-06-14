@@ -81,7 +81,7 @@ userRouter.get("/" , authmiddleware, async(req , res) => {
             id: id
         },
         select:{
-            name : true,
+            name : true, 
             email: true
         }
     });

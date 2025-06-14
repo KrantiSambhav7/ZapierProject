@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.zapData = exports.signinData = exports.signupData = void 0;
 const zod_1 = __importDefault(require("zod"));
+// Define all the types used in the application using Zod
 exports.signupData = zod_1.default.object({
     username: zod_1.default.string().min(5),
     password: zod_1.default.string().min(6),
