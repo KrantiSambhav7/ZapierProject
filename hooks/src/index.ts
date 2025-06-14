@@ -19,7 +19,7 @@ app.post("/hooks/catch/:userId/:zapId" , async(req , res) => {
         const run = await tx.zapRun.create({ // This is the ZapRun entry that will be created for this webhook call
             data:{
                 zapId: zapId,
-                metadata: body
+                metadata: body // Each trigger will have some metadata, so we store it here 
             }
         })
         await tx.zapRunOutbox.create({ // This is the outbox entry that will be processed later by a worker or a queue system

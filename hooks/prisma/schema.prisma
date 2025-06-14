@@ -50,7 +50,7 @@ model AvailableTrigger{ // This model defines the available triggers that can be
   triggers Trigger[] // Many(Trigger) to one(AvailableTrigger) relationship with Trigger
 }
 
-model AvailableAction{
+model AvailableAction{ // This model defines the available actions that can be used in Zaps
   id      String @id @default(uuid())
   name    String
   actions Action[]
