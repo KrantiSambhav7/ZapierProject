@@ -16,7 +16,7 @@ app.post("/hooks/catch/:userId/:zapId" , async(req , res) => {
     // So when the req comes we will then start to execute this.
     // Here we will create a ZapRun and then create a ZapRunOutbox entry. Two tables are being created here. Outbox table is used to store the data that will be processed later by a worker or a queue system because it is easy to achieve atomicity in DBs.
     await client.$transaction(async tx => {
-        const run = await tx.zapRun.create({ // This is the ZapRun entry that will be created for this webhook call
+        const run = await tx.zapRun.create({ // This is the ZapRun entry that will be created for this webhook call. This will tell us when the Zap was run and what data was associated with it.
             data:{
                 zapId: zapId,
                 metadata: body // Each trigger will have some metadata, so we store it here 

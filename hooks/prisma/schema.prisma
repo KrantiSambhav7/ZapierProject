@@ -24,14 +24,14 @@ model Zap{
   triggerId String 
   trigger   Trigger? // This is the trigger that starts the Zap
   actions   Action[]
-  zapRuns   zapRun[]
+  zapRuns   zapRun[] // This is the history of runs for this Zap. Hence this is an array of zapRun
 }
 
 model Trigger{
   id        String @default(uuid()) @id
   zapId     String @unique
-  triggerId String  @unique
-  type      AvailableTrigger @relation(fields: [triggerId], references: [id]) // This is the type of trigger, e.g. "webhook", "cron", etc.
+  availableTriggerId String  @unique
+  type      AvailableTrigger @relation(fields: [availableTriggerId], references: [id]) // This is the type of trigger, e.g. "webhook", "cron", etc.
   zap       Zap               @relation(fields: [zapId] , references: [id])   // This is the Zap that this trigger belongs to
 } 
 
@@ -60,7 +60,7 @@ model zapRun{
   id           String @id @default(uuid())
   zapId        String 
   zap          Zap     @relation(fields: [zapId] , references: [id])
-  zapRunOutbox zapRunOutbox?
+  zapRunOutbox zapRunOutbox? // This is the outbox for this zap run, which contains the metadata and other information
   metadata     Json
 }
 
