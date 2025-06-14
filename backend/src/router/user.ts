@@ -7,13 +7,14 @@ import jwt from "jsonwebtoken"
 
 userRouter.post("/signup" , async(req , res) => {
     const parsedData = signupData.safeParse(req.body)
+    // Validate the request body using Zod
     if(!parsedData.success){
         res.status(404).json({
             message: "Hello"
         })
         return;
     }
-    
+    // First check if the user already exists. 
     const userExist = await prismaClient.user.findFirst({
         where: {
             email: parsedData.data.username
@@ -26,7 +27,7 @@ userRouter.post("/signup" , async(req , res) => {
         })
         return;
     }
-
+    // If the user does not exist, create a new user
     await prismaClient.user.create({
         data: {
             email: parsedData.data.username,
@@ -34,7 +35,7 @@ userRouter.post("/signup" , async(req , res) => {
             name: parsedData.data.name 
         }
     })
-
+    // Respond with a success message
     res.json({
         message: "User has been created"
     })
