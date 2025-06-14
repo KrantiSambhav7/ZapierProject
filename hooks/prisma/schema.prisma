@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+} 
+
+model User{
+  id       Int  @default(autoincrement()) @id @unique
+  name     String 
+  password String 
+  email    String @unique
+}
+
+model Zap{
+  id        String @id @default(uuid())
+  triggerId String 
+  trigger   Trigger? // This is the trigger that starts the Zap
+  actions   Action[]
+  zapRuns   zapRun[]
+}
+
+model Trigger{
+  id        String @default(uuid()) @id
+  zapId     String @unique
+  triggerId String  @unique
+  type      AvailableTrigger @relation(fields: [triggerId], references: [id]) // This is the type of trigger, e.g. "webhook", "cron", etc.
+  zap       Zap               @relation(fields: [zapId] , references: [id])   // This is the Zap that this trigger belongs to
+} 
+
+model Action{
+  id        String  @id @default(uuid())
+  zapId     String 
+  zap       Zap     @relation(fields: [zapId] , references: [id])
+  actionId  String 
+  type      AvailableAction @relation(fields: [actionId] , references: [id])
+  sortingOrder Int @default(0)
+}
+
+model AvailableTrigger{ // This model defines the available triggers that can be used in Zaps
+  id      String @id @default(uuid())
+  name    String
+  triggers Trigger[] // Many(Trigger) to one(AvailableTrigger) relationship with Trigger
+}
+
+model AvailableAction{
+  id      String @id @default(uuid())
+  name    String
+  actions Action[]
+}
+
+model zapRun{
+  id           String @id @default(uuid())
+  zapId        String 
+  zap          Zap     @relation(fields: [zapId] , references: [id])
+  zapRunOutbox zapRunOutbox?
+  metadata     Json
+}
+
+model zapRunOutbox{
+  id        String  @id @default(uuid())
+  zapRunId  String  @unique
+  zapRun    zapRun?  @relation(fields: [zapRunId] , references: [id])
+}

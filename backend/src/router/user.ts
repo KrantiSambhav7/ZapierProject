@@ -1,0 +1,89 @@
+import express from "express"
+const userRouter = express.Router();
+import  authmiddleware  from "../middleware";
+import { signinData , signupData } from "../types";
+import {prismaClient} from "../db/index"
+import jwt from "jsonwebtoken"
+
+userRouter.post("/signup" , async(req , res) => {
+    const parsedData = signupData.safeParse(req.body)
+    if(!parsedData.success){
+        res.status(404).json({
+            message: "Hello"
+        })
+        return;
+    }
+    
+    const userExist = await prismaClient.user.findFirst({
+        where: {
+            email: parsedData.data.username
+        }
+    })
+
+    if(userExist){
+        res.json({
+            message: "Already Signed up"
+        })
+        return;
+    }
+
+    await prismaClient.user.create({
+        data: {
+            email: parsedData.data.username,
+            password: parsedData.data.password,
+            name: parsedData.data.name 
+        }
+    })
+
+    res.json({
+        message: "User has been created"
+    })
+})
+
+userRouter.post("/signin" , async(req , res) => {
+    const parsedData = signinData.safeParse(req.body)
+
+    if(!parsedData.success){
+        res.status(404).json({
+            message: "Hello"
+        })
+        return;
+    }
+
+    const user = await prismaClient.user.findFirst({
+        where: {
+            email: parsedData.data.username,
+            password: parsedData.data.password
+        }
+    })
+
+    if(!user){
+        res.json({
+            message: "Incorrect User"
+        })
+        return;
+    }
+
+    const token = jwt.sign({
+        id: user.id
+    } , "SecretPassword")
+
+    res.json({token: token});
+})
+
+userRouter.get("/" , authmiddleware, async(req , res) => {
+    //@ts-ignore
+    const id = req.id;
+    const user = await prismaClient.user.findFirst({
+        where: {
+            id: id
+        },
+        select:{
+            name: true,
+            email: true
+        }
+    });
+    res.json({user})
+})
+
+export default userRouter
