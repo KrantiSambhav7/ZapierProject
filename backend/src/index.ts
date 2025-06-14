@@ -1,8 +1,7 @@
 import express from "express";
-import  authmiddleware  from "./middleware";
 import userRouter from "./router/user";
 import zapRouter from "./router/zap";
-import cors from "cors"
+import cors from "cors"     // npm i cors
  
 const app = express();
 app.use(express.json());

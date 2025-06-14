@@ -1,5 +1,6 @@
 import zod from "zod"
 
+// Define all the types used in the application using Zod
 export const signupData = zod.object({
     username: zod.string().min(5),
     password: zod.string().min(6),
