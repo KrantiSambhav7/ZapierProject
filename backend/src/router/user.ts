@@ -4,6 +4,7 @@ import  authmiddleware  from "../middleware";
 import { signinData , signupData } from "../types";
 import {prismaClient} from "../db/index"
 import jwt from "jsonwebtoken"
+import { JWT_SECRET } from "../config";
 
 userRouter.post("/signup" , async(req , res) => {
     const parsedData = signupData.safeParse(req.body)
@@ -43,14 +44,14 @@ userRouter.post("/signup" , async(req , res) => {
 
 userRouter.post("/signin" , async(req , res) => {
     const parsedData = signinData.safeParse(req.body)
-
+    // Validate the request body using Zod
     if(!parsedData.success){
         res.status(404).json({
             message: "Hello"
         })
         return;
     }
-
+    // Check if the user exists with the provided credentials. Search by email and password
     const user = await prismaClient.user.findFirst({
         where: {
             email: parsedData.data.username,
@@ -64,10 +65,10 @@ userRouter.post("/signin" , async(req , res) => {
         })
         return;
     }
-
+    // If the user exists, create a JWT token and send it back to the user
     const token = jwt.sign({
         id: user.id
-    } , "SecretPassword")
+    } , JWT_SECRET)
 
     res.json({token: token});
 })
