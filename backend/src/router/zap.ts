@@ -18,7 +18,7 @@ zapRouter.post("/", authmiddleware, async(req, res) => {
         const zapId = await prismaClient.$transaction(async tx => {
             //@ts-ignore
             const id = req.id ;
-            const zap = await tx.zap.create({
+            const zap = await tx.zap.create({ // Create a new zap with the userId and triggerId.
                 data: {
                     userId: parseInt(id),
                     triggerId: "",
@@ -51,6 +51,7 @@ zapRouter.post("/", authmiddleware, async(req, res) => {
         console.error(error);
         res.status(500).json({ message: "Something went wrong" });
     }
+    res.json({ message: "Zap created successfully" });
 });
 
 

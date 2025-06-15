@@ -16,8 +16,8 @@ exports.signinData = zod_1.default.object({
     password: zod_1.default.string()
 });
 exports.zapData = zod_1.default.object({
-    availableTriggerId: zod_1.default.string(),
-    triggerMetaData: zod_1.default.any().optional(),
+    availableTriggerId: zod_1.default.string(), // The ID of the trigger to be used
+    triggerMetaData: zod_1.default.any().optional(), // Optional metadata for the trigger
     actions: zod_1.default.array(zod_1.default.object({
         availableActionId: zod_1.default.string(),
         actionMetaData: zod_1.default.any().optional()

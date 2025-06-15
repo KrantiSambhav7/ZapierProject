@@ -17,6 +17,7 @@ const middleware_1 = __importDefault(require("../middleware"));
 const types_1 = require("../types");
 const db_1 = require("../db");
 const zapRouter = express_1.default.Router();
+// Create a new zap
 zapRouter.post("/", middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
     const parsedData = types_1.zapData.safeParse(body);
