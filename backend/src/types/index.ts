@@ -13,9 +13,9 @@ export const signinData = zod.object({
 })
 
 export const zapData = zod.object({
-    availableTriggerId: zod.string(),
-    triggerMetaData: zod.any().optional(),
-    actions: zod.array(zod.object({
+    availableTriggerId: zod.string(), // The ID of the trigger to be used
+    triggerMetaData: zod.any().optional(), // Optional metadata for the trigger
+    actions: zod.array(zod.object({ // Each action in the zap
         availableActionId: zod.string(),
         actionMetaData: zod.any().optional()
     }))

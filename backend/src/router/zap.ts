@@ -4,6 +4,7 @@ import { zapData } from "../types";
 import { prismaClient } from "../db";
 const zapRouter = express.Router();
 
+// Create a new zap
 zapRouter.post("/", authmiddleware, async(req, res) => {
     const body = req.body;
     const parsedData = zapData.safeParse(body);
@@ -22,20 +23,20 @@ zapRouter.post("/", authmiddleware, async(req, res) => {
                     userId: parseInt(id),
                     triggerId: "",
                     actions: {
-                        create: parsedData.data.actions.map((x , index) => ({
+                        create: parsedData.data.actions.map((x , index) => ({ // Create actions in the zap.
                             actionId: x.availableActionId,
                             sortingOrder: index
                         }))
                     }
                 }
             })
-            const trigger = await tx.trigger.create({ // In one to one relationships we will create the zap first and then the trigger needs to be created otherwise there is a problem 
+            const trigger = await tx.trigger.create({ // In one to one relationships we will create the zap first and then the trigger needs to be created otherwise there is a problem. 
                 data: {
                     triggerId: parsedData.data.availableTriggerId,
                     zapId : zap.id
                 }
             });
-            await prismaClient.zap.update({
+            await prismaClient.zap.update({ // Update the zap with the trigger id.
                 where:{
                     id: zap.id
                 },
