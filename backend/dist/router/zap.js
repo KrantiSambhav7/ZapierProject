@@ -62,6 +62,7 @@ zapRouter.post("/", middleware_1.default, (req, res) => __awaiter(void 0, void 0
         console.error(error);
         res.status(500).json({ message: "Something went wrong" });
     }
+    res.json({ message: "Zap created successfully" });
 }));
 zapRouter.get("/", middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //@ts-ignore

@@ -38,13 +38,13 @@ const page = () => {
                   setPassword(e.target.value)
                 }}/>
                 <div className='pt-4'>
-                <PrimaryButton size='big' children={"Login"} onClick={async() => {
+                <PrimaryButton size='big' children={"Login"} onClick={async () => {
                    const res = await axios.post(`${BACKEND_URL}/api/v1/user/signin` , {
                     username: email,
                     password: password,
                    });
                    localStorage.setItem("token" , res.data.token ) // First we need to set the token to in the local storage before moving 
-                   router.push("/dashboard")}} />
+                   router.push("/dashboard")}} /> 
                 </div>
             </div>
 

@@ -4,7 +4,6 @@ import DarkButton from '@/components/buttons/DarkButton'
 import React, { useEffect, useState } from 'react'
 import { BACKEND_URL } from '../config';
 import axios from "axios";
-import Link from 'next/link';
 import LinkButton from '@/components/buttons/LinkButton';
 import { useRouter } from 'next/navigation';
 
@@ -40,7 +39,7 @@ function useZaps(){
         const func = async() => {
             const res = await axios.get(`${BACKEND_URL}/api/v1/zap`, {
                 headers: {
-                    "Authorization": localStorage.getItem("token")
+                    "Authorization": localStorage.getItem("token") // Set the token in the header
                 }
             });
             setZaps(res.data.zaps);
