@@ -2,7 +2,7 @@
 import Appbar from '@/components/Appbar'
 import DarkButton from '@/components/buttons/DarkButton'
 import React, { useEffect, useState } from 'react'
-import { BACKEND_URL } from '../config';
+import { BACKEND_URL, HOOKS_URL } from '../config';
 import axios from "axios";
 import LinkButton from '@/components/buttons/LinkButton';
 import { useRouter } from 'next/navigation';
@@ -18,7 +18,8 @@ interface Zap{
         sortingOrder: number,
         type: {
             id: string,
-            name: string
+            name: string,
+            image: string
         }
     }[],
     trigger: {
@@ -27,7 +28,8 @@ interface Zap{
         triggerId: string,
         type: {
             id: string,
-            name: string
+            name: string,
+            image: string
         }
     }
 }
@@ -78,15 +80,17 @@ function ZapTable({zaps} : {zaps: Zap[]}){
     <div className='flex'>
         <div className='flex-1'></div>
         <div className='flex-1'>Name</div>
-        <div className='flex-1'>Last Edit</div>
-        <div className='flex-1'>Running</div>
+        <div className='flex-1'>ID</div>
+        <div className='flex-1'>Created At</div>
+        <div className='flex-1'>Webhook URL</div>
         <div className='flex-1'>Go</div>
     </div>
     <div>
-        {zaps.map(item => <div className='flex py-4 border-b border-t'>
-            <div className='flex-1'>{item.trigger.type.name} {item.actions.map(action => action.type.name + " ")}</div>
+        {zaps.map(item => <div key={item.id} className='flex py-4 border-b border-t'>
+            <div className='flex-1 flex '><img src={item.trigger.type.image} className='h-[30px] w-[30px]' ></img> {item.actions.map(action => <img key={action.id} src={action.type.image} alt="" className='h-[30px] w-[30px]'/> )}</div>
             <div className='flex-1'>{item.id}</div>
             <div className='flex-1'>Nov 13, 2023</div>
+            <div className='flex-1'>{`${HOOKS_URL}/hooks/catch/1${item.id}`}</div>
             <div className='flex-1'><LinkButton onClick={() => {
                 router.push("/zap/" + item.id)
             }}>Go</LinkButton></div>
