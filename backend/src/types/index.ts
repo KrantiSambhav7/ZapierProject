@@ -17,6 +17,6 @@ export const zapData = zod.object({
     triggerMetaData: zod.any().optional(), // Optional metadata for the trigger
     actions: zod.array(zod.object({ // Each action in the zap
         availableActionId: zod.string(),
-        actionMetaData: zod.any().optional()
+        actionMetaData: zod.any().optional(),
     }))
 })
